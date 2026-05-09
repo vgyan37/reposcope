@@ -1,0 +1,101 @@
+{
+  "generated_at": "2026-05-09T16:44:42.368048+00:00",
+  "sample_size": 0,
+  "means": {
+    "commits30": null,
+    "daysInactive": null,
+    "contributors": null,
+    "closeRate": null,
+    "relFreq": null,
+    "avgClose": null,
+    "avgComments": null,
+    "fehlerProd": null,
+    "forkRatio": null,
+    "starsTage": null
+  },
+  "medians": {
+    "commits30": null,
+    "daysInactive": 1,
+    "contributors": null,
+    "closeRate": null,
+    "relFreq": null,
+    "avgClose": null,
+    "avgComments": null,
+    "fehlerProd": null,
+    "forkRatio": null,
+    "starsTage": null
+  },
+  "kpi_stats": {
+    "commits30": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "daysInactive": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "contributors": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "closeRate": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "relFreq": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "avgClose": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "avgComments": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "fehlerProd": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "forkRatio": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    },
+    "starsTage": {
+      "mean": null,
+      "median": null,
+      "stdev": null,
+      "p25": null,
+      "p75": null
+    }
+  },
+  "top_languages": []
+}
