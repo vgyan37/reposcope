@@ -1,101 +1,142 @@
 {
-  "generated_at": "2026-05-09T16:44:42.368048+00:00",
-  "sample_size": 0,
+  "generated_at": "2026-05-09T17:13:39.644163+00:00",
+  "sample_size": 100,
   "means": {
-    "commits30": null,
-    "daysInactive": null,
-    "contributors": null,
-    "closeRate": null,
-    "relFreq": null,
-    "avgClose": null,
-    "avgComments": null,
-    "fehlerProd": null,
-    "forkRatio": null,
-    "starsTage": null
+    "commits30": 942.9062,
+    "daysInactive": 68.01,
+    "contributors": 87.404,
+    "closeRate": 0.4728,
+    "relFreq": 36.6305,
+    "avgClose": 10.5792,
+    "avgComments": 1.3054,
+    "fehlerProd": 0.5759,
+    "forkRatio": 0.1629,
+    "starsTage": 193.9931
   },
   "medians": {
-    "commits30": null,
+    "commits30": 249.5,
     "daysInactive": 1,
-    "contributors": null,
-    "closeRate": null,
-    "relFreq": null,
-    "avgClose": null,
-    "avgComments": null,
-    "fehlerProd": null,
-    "forkRatio": null,
-    "starsTage": null
+    "contributors": 99,
+    "closeRate": 0.4555,
+    "relFreq": 12.86,
+    "avgClose": 1,
+    "avgComments": 1.17,
+    "fehlerProd": 0.0207,
+    "forkRatio": 0.1412,
+    "starsTage": 59.843
   },
   "kpi_stats": {
     "commits30": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 942.9062,
+      "median": 249.5,
+      "stdev": 2456.2412,
+      "p25": 154,
+      "p75": 747
     },
     "daysInactive": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 68.01,
+      "median": 0.0,
+      "stdev": 168.0709,
+      "p25": 0,
+      "p75": 19
     },
     "contributors": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 87.404,
+      "median": 99,
+      "stdev": 28.388,
+      "p25": 97,
+      "p75": 100
     },
     "closeRate": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 0.4728,
+      "median": 0.4555,
+      "stdev": 0.3024,
+      "p25": 0.2121,
+      "p75": 0.7407
     },
     "relFreq": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 36.6305,
+      "median": 12.86,
+      "stdev": 64.8927,
+      "p25": 4.55,
+      "p75": 47.42
     },
     "avgClose": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 10.5792,
+      "median": 1,
+      "stdev": 27.8714,
+      "p25": 0.14,
+      "p75": 5
     },
     "avgComments": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 1.3054,
+      "median": 1.17,
+      "stdev": 0.8896,
+      "p25": 0.67,
+      "p75": 1.81
     },
     "fehlerProd": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 0.5759,
+      "median": 0.0207,
+      "stdev": 1.7887,
+      "p25": 0.0126,
+      "p75": 0.0899
     },
     "forkRatio": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 0.1629,
+      "median": 0.1412,
+      "stdev": 0.1036,
+      "p25": 0.0939,
+      "p75": 0.2065
     },
     "starsTage": {
-      "mean": null,
-      "median": null,
-      "stdev": null,
-      "p25": null,
-      "p75": null
+      "mean": 193.9931,
+      "median": 59.843,
+      "stdev": 564.1976,
+      "p25": 38.778,
+      "p75": 120.045
     }
   },
-  "top_languages": []
+  "top_languages": [
+    [
+      "Python",
+      20
+    ],
+    [
+      "TypeScript",
+      16
+    ],
+    [
+      "JavaScript",
+      10
+    ],
+    [
+      "C++",
+      5
+    ],
+    [
+      "Go",
+      5
+    ],
+    [
+      "Shell",
+      5
+    ],
+    [
+      "Rust",
+      5
+    ],
+    [
+      "HTML",
+      4
+    ],
+    [
+      "Java",
+      3
+    ],
+    [
+      "Markdown",
+      2
+    ]
+  ]
 }
