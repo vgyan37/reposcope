@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RepoScope — Mean vs. Median Vergleich (Top 100)</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#0a0c10; --surface:#111318; --surface2:#181b22;
+      --border:#272b35; --border2:#353a47;
+      --text:#e6edf3; --muted:#7d8590;
+      --mean:#f78166; --median:#58a6ff;
+      --green:#3fb950; --yellow:#e3b341; --purple:#bc8cff;
+      --mono:'JetBrains Mono',monospace; --sans:'Syne',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:linear-gradient(rgba(63,185,80,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(63,185,80,.025) 1px,transparent 1px);
+      background-size:40px 40px}
+
+    .wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px 60px}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;background:rgba(10,12,16,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);margin-bottom:0}
+    .nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px}
+    .logo{font-weight:800;font-size:1.05rem;letter-spacing:-.5px}
+    .logo span{color:#3fb950}
+
+    /* HEADER */
+    .page-head{padding:44px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px}
+    .page-head h1{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.04em}
+    .page-head h1 em{font-style:normal;color:var(--mean)} 
+    .page-head h1 em.blue{color:var(--median)}
+    .page-head p{color:var(--muted);margin-top:8px;font-size:.88rem;line-height:1.6;max-width:700px}
+
+    /* INPUT */
+    .input-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:24px}
+    .input-row{display:flex;gap:10px}
+    .input-row input{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:11px 16px;color:var(--text);font-family:var(--mono);font-size:.88rem}
+    .input-row input:focus{outline:none;border-color:#3fb950}
+    .btn{background:#3fb950;color:#000;border:none;border-radius:8px;padding:11px 22px;font-family:var(--sans);font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+    .btn:hover{opacity:.85} .btn:disabled{opacity:.4;cursor:not-allowed}
+    .token-note{font-size:.73rem;color:var(--muted);margin-top:8px}
+    .token-note a{color:var(--median)}
+
+    /* LEGEND */
+    .legend{display:flex;gap:20px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:24px;font-size:.8rem}
+    .leg{display:flex;align-items:center;gap:7px}
+    .leg-line{width:24px;height:3px;border-radius:2px}
+
+    /* PROGRESS */
+    #progress{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:.85rem;color:var(--muted)}
+    .prog-bar{height:4px;background:var(--border2);border-radius:2px;margin-top:8px;overflow:hidden}
+    .prog-fill{height:100%;background:#3fb950;border-radius:2px;transition:width .3s;width:0%}
+
+    /* SUMMARY GRID */
+    .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:28px}
+    .sum-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px}
+    .sum-val{font-family:var(--mono);font-size:1.3rem;font-weight:700}
+    .sum-lbl{font-size:.71rem;color:var(--muted);margin-top:3px}
+
+    /* METRIC SECTIONS */
+    #metrics-section{display:none}
+    .section-title{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:28px 0 14px}
+
+    /* METRIC CARD */
+    .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:14px}
+    .mc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+    .mc-title{font-size:.95rem;font-weight:700}
+    .mc-dir{font-size:.72rem;color:var(--muted);background:var(--surface2);padding:2px 8px;border-radius:4px}
+
+    /* STAT BOXES */
+    .stat-boxes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .stat-box{border-radius:8px;padding:12px 14px}
+    .sb-mean{background:rgba(247,129,102,.1);border:1px solid rgba(247,129,102,.25)}
+    .sb-median{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.2)}
+    .sb-type{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+    .sb-mean .sb-type{color:var(--mean)}
+    .sb-median .sb-type{color:var(--median)}
+    .sb-val{font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--text)}
+    .sb-sub{font-size:.7rem;color:var(--muted);margin-top:3px}
+
+    /* DOT STRIP CHART */
+    .chart-wrap{position:relative;margin-bottom:8px}
+    .chart-label-row{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);font-family:var(--mono);margin-bottom:4px}
+    .dot-strip{width:100%;height:52px;background:var(--surface2);border-radius:6px;position:relative;overflow:hidden}
+    .dot{position:absolute;width:8px;height:8px;border-radius:50%;top:50%;transform:translateY(-50%);opacity:.75;transition:opacity .1s}
+    .dot:hover{opacity:1;z-index:10}
+    .vline{position:absolute;top:4px;bottom:4px;width:2px;border-radius:1px}
+    .vline-mean{background:var(--mean)}
+    .vline-median{background:var(--median)}
+    .vline-label{position:absolute;top:-18px;font-size:.62rem;font-family:var(--mono);transform:translateX(-50%);white-space:nowrap}
+    .vline-label.mean{color:var(--mean)}
+    .vline-label.median{color:var(--median)}
+
+    /* PCTS ROW */
+    .pcts{display:flex;gap:16px;font-size:.78rem;margin-top:8px;flex-wrap:wrap}
+    .pct-item{display:flex;align-items:center;gap:6px;color:var(--muted)}
+    .pct-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+    /* VERDICT TABLE */
+    .verdict-section{margin-top:32px;border-top:1px solid var(--border);padding-top:24px}
+    .verdict-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .verdict-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)}
+    .verdict-table td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+    .verdict-table td:first-child{color:var(--text);font-weight:600}
+    .verdict-table tr:last-child td{border-bottom:none}
+    .v-mean{color:var(--mean)!important;font-weight:700!important}
+    .v-median{color:var(--median)!important;font-weight:700!important}
+    .v-tie{color:var(--yellow)!important;font-weight:700!important}
+
+    footer{text-align:center;padding:32px 0 16px;color:var(--muted);font-size:.75rem}
+  </style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <div class="logo">Repo<span>Scope</span></div>
+  <div style="font-size:.8rem;color:var(--muted)">Mean vs. Median — Top 100 Analyse</div>
+</div></nav>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1><em>Mittelwert</em> vs. <em class="blue">Median</em> — welcher Schwellenwert ist fairer?</h1>
+    <p>Lädt die Top-100 GitHub-Repos nach Stars direkt über die API und zeigt für jede Metrik die Verteilung mit beiden Schwellenwerten. So siehst du sofort ob Ausreißer den Mittelwert verzerren.</p>
+  </div>
+
+  <div class="input-card">
+    <div class="input-row">
+      <input id="token-inp" type="password" placeholder="GitHub Token: ghp_… (empfohlen — sonst nur 60 Req/h)" />
+      <button class="btn" id="fetch-btn" onclick="fetchData()">Top 100 laden →</button>
+    </div>
+    <div class="token-note">Token erstellen: <a href="https://github.com/settings/tokens/new?scopes=public_repo" target="_blank">github.com/settings/tokens</a> — nur <code>public_repo</code> nötig · Wird nicht gespeichert</div>
+  </div>
+
+  <div id="progress">
+    <span id="prog-text">Lade Daten…</span>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+
+  <div id="metrics-section">
+    <div class="legend">
+      <span style="font-weight:600;color:var(--text)">Legende:</span>
+      <span class="leg"><div class="leg-line" style="background:var(--mean)"></div> Mittelwert</span>
+      <span class="leg"><div class="leg-line" style="background:var(--median)"></div> Median</span>
+      <span class="leg"><div class="leg-line" style="background:var(--green);width:10px;height:10px;border-radius:50%"></div> Repo (über beiden)</span>
+      <span class="leg"><div class="leg-line" style="background:var(--yellow);width:10px;height:10px;border-radius:50%"></div> Repo (dazwischen)</span>
+      <span class="leg"><div class="leg-line" style="background:var(--muted);width:10px;height:10px;border-radius:50%"></div> Repo (unter beiden)</span>
+    </div>
+
+    <div class="summary-grid" id="summary-grid"></div>
+
+    <div class="section-title">Metriken — Verteilung mit Mean & Median Schwellenwert</div>
+    <div id="metric-cards"></div>
+
+    <div class="verdict-section">
+      <div class="section-title">Empfehlung: Welcher Schwellenwert ist besser?</div>
+      <table class="verdict-table" id="verdict-table">
+        <thead><tr>
+          <th>Metrik</th><th>Mittelwert</th><th>Median</th>
+          <th>Ausreißer-Einfluss</th><th>Empfehlung</th>
+        </tr></thead>
+        <tbody id="verdict-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>RepoScope · Nur Basic-Metriken aus GitHub Search API (2 Calls für 100 Repos)</footer>
+</div>
+
+<script>
+const API = 'https://api.github.com';
+let REPOS = [];
+
+function getHeaders() {
+  const t = document.getElementById('token-inp').value.trim();
+  const h = { 'Accept': 'application/vnd.github+json' };
+  if (t) h['Authorization'] = 'Bearer ' + t;
+  return h;
+}
+
+function setProgress(text, pct) {
+  document.getElementById('prog-text').textContent = text;
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+// ── ERROR BOX ────────────────────────────────────────────────────
+function showError(msg) {
+  let box = document.getElementById('error-box');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'error-box';
+    box.style.cssText = 'background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.4);border-radius:8px;padding:14px 18px;margin-bottom:16px;color:#f85149;font-size:.88rem;line-height:1.6';
+    document.getElementById('progress').after(box);
+  }
+  box.innerHTML = '<strong>⚠ Fehler:</strong> ' + msg +
+    '<br><small style="opacity:.7">Tipp: Öffne diese Datei über GitHub Pages statt lokal, oder prüfe ob der Token korrekt ist.</small>';
+  box.style.display = 'block';
+}
+
+// ── FETCH ────────────────────────────────────────────────────────
+async function fetchData() {
+  const btn = document.getElementById('fetch-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Lädt…';
+
+  const errBox = document.getElementById('error-box');
+  if (errBox) errBox.style.display = 'none';
+
+  document.getElementById('progress').style.display = 'block';
+  document.getElementById('metrics-section').style.display = 'none';
+  REPOS = [];
+
+  try {
+    const token = document.getElementById('token-inp').value.trim();
+    if (!token) {
+      const ok = confirm('Kein Token eingegeben — ohne Token nur 60 Anfragen/Stunde möglich. Trotzdem fortfahren?');
+      if (!ok) { btn.disabled = false; btn.textContent = 'Top 100 laden →'; document.getElementById('progress').style.display='none'; return; }
+    }
+
+    setProgress('Seite 1/2 laden (50 Repos)…', 20);
+    let p1res;
+    try {
+      p1res = await fetch(
+        `${API}/search/repositories?q=stars:>5000+is:public+archived:false&sort=stars&order=desc&per_page=50&page=1`,
+        { headers: getHeaders() }
+      );
+    } catch (netErr) {
+      throw new Error('Netzwerk-Fehler: ' + netErr.message + ' — Möglicherweise blockiert dein Browser Anfragen von lokalen Dateien. Versuche die Seite über GitHub Pages zu öffnen.');
+    }
+
+    if (p1res.status === 401) throw new Error('Token ungültig oder abgelaufen. Neuen Token erstellen.');
+    if (p1res.status === 403) throw new Error('Rate Limit erreicht (60/h ohne Token). Token eingeben für 5000/h.');
+    if (!p1res.ok) {
+      const errData = await p1res.json().catch(() => ({}));
+      throw new Error(`API Fehler ${p1res.status}: ${errData.message || 'Unbekannter Fehler'}`);
+    }
+    const d1 = await p1res.json();
+    if (!d1.items || d1.items.length === 0) throw new Error('Keine Repos gefunden. Bitte Token prüfen.');
+
+    setProgress(`Seite 1 geladen (${d1.items.length} Repos). Kurze Pause…`, 45);
+    await new Promise(r => setTimeout(r, 1200));
+
+    setProgress('Seite 2/2 laden (weitere 50 Repos)…', 60);
+    const p2res = await fetch(
+      `${API}/search/repositories?q=stars:>5000+is:public+archived:false&sort=stars&order=desc&per_page=50&page=2`,
+      { headers: getHeaders() }
+    );
+    if (!p2res.ok) throw new Error(`Seite 2 Fehler: ${p2res.status}`);
+    const d2 = await p2res.json();
+
+    setProgress('Metriken berechnen…', 85);
+    const items = [...d1.items, ...(d2.items || [])].slice(0, 100);
+
+    const now = Date.now();
+    REPOS = items.map((r, i) => {
+      const stars  = r.stargazers_count || 0;
+      const forks  = r.forks_count || 0;
+      const age    = Math.max(1, Math.floor((now - new Date(r.created_at)) / 86400000));
+      const pushed = Math.max(0, Math.floor((now - new Date(r.pushed_at)) / 86400000));
+      return {
+        rank: i + 1,
+        name: r.full_name,
+        url:  r.html_url,
+        lang: r.language,
+        stars, forks,
+        open_issues:   r.open_issues_count || 0,
+        age_days:      age,
+        days_inactive: pushed,
+        fork_ratio:    stars > 0 ? forks / stars : 0,
+        stars_per_day: stars / age,
+        watchers:      r.watchers_count || 0,
+      };
+    });
+
+    setProgress(`✅ ${REPOS.length} Repos geladen. Visualisierung aufbauen…`, 95);
+    await new Promise(r => setTimeout(r, 100));
+    render();
+    document.getElementById('progress').style.display = 'none';
+    document.getElementById('metrics-section').style.display = 'block';
+    document.getElementById('metrics-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (e) {
+    setProgress('Fehler beim Laden', 0);
+    showError(e.message);
+    console.error('RepoScope fetchData error:', e);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Top 100 laden →';
+}
+
+// ── STATS ────────────────────────────────────────────────────────
+function mean(arr)   { return arr.reduce((a,b)=>a+b,0)/arr.length; }
+function median(arr) {
+  const s = [...arr].sort((a,b)=>a-b), n=s.length, m=Math.floor(n/2);
+  return n%2 ? s[m] : (s[m-1]+s[m])/2;
+}
+function std(arr) {
+  const m=mean(arr); return Math.sqrt(arr.reduce((s,v)=>s+(v-m)**2,0)/arr.length);
+}
+function skewness(arr) {
+  const m=mean(arr), s=std(arr);
+  if (s===0) return 0;
+  return arr.reduce((a,v)=>a+((v-m)/s)**3,0)/arr.length;
+}
+function pctAbove(arr, threshold) {
+  return Math.round(arr.filter(v=>v>=threshold).length/arr.length*100);
+}
+function pctBelow(arr, threshold) {
+  return Math.round(arr.filter(v=>v<=threshold).length/arr.length*100);
+}
+
+const fmt  = (n,d=0) => n===undefined||n===null?'—':Number(n).toLocaleString('de-DE',{maximumFractionDigits:d});
+const fmtS = (n,d=2) => n<0.001?n.toExponential(2):fmt(n,d);
+
+// ── METRIC DEFINITIONS ───────────────────────────────────────────
+const METRICS = [
+  { key:'stars',        label:'Stars',                     unit:'',       dir:'above', fmtFn: v=>fmt(v,0) },
+  { key:'forks',        label:'Forks',                     unit:'',       dir:'above', fmtFn: v=>fmt(v,0) },
+  { key:'fork_ratio',   label:'Fork-Ratio (Forks/Stars)',  unit:'%',      dir:'above', fmtFn: v=>(v*100).toFixed(1)+'%' },
+  { key:'open_issues',  label:'Offene Issues',             unit:'',       dir:'any',   fmtFn: v=>fmt(v,0) },
+  { key:'age_days',     label:'Projektalter (Tage)',        unit:'T',      dir:'any',   fmtFn: v=>fmt(v,0)+' T' },
+  { key:'days_inactive',label:'Tage seit letztem Commit',  unit:'T',      dir:'below', fmtFn: v=>fmt(v,1)+' T' },
+  { key:'stars_per_day',label:'Stars pro Tag (Stars/Alter)',unit:' St/T', dir:'above', fmtFn: v=>v.toFixed(2) },
+  { key:'watchers',     label:'Watchers',                  unit:'',       dir:'above', fmtFn: v=>fmt(v,0) },
+];
+
+// ── RENDER ───────────────────────────────────────────────────────
+function render() {
+  // Summary
+  const langs = {};
+  REPOS.forEach(r=>{if(r.lang) langs[r.lang]=(langs[r.lang]||0)+1});
+  const topLang = Object.entries(langs).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+  const avgStars = Math.round(mean(REPOS.map(r=>r.stars)));
+  const maxStars = Math.max(...REPOS.map(r=>r.stars));
+  document.getElementById('summary-grid').innerHTML = [
+    {val:REPOS.length, lbl:'Repos geladen'},
+    {val:fmt(avgStars), lbl:'Ø Stars (Mittelwert)'},
+    {val:fmt(Math.round(median(REPOS.map(r=>r.stars)))), lbl:'Stars (Median)'},
+    {val:fmt(maxStars), lbl:'Meiste Stars'},
+    {val:topLang, lbl:'Häufigste Sprache'},
+  ].map(s=>`<div class="sum-card"><div class="sum-val">${s.val}</div><div class="sum-lbl">${s.lbl}</div></div>`).join('');
+
+  // Metric cards
+  const cardsHTML = METRICS.map(m => buildMetricCard(m)).join('');
+  document.getElementById('metric-cards').innerHTML = cardsHTML;
+
+  // Verdict table
+  buildVerdictTable();
+}
+
+function buildMetricCard(m) {
+  const vals = REPOS.map(r => r[m.key]).filter(v => v !== null && v !== undefined && isFinite(v));
+  if (!vals.length) return '';
+
+  const mn    = mean(vals);
+  const md    = median(vals);
+  const sk    = skewness(vals);
+  const minV  = Math.min(...vals);
+  const maxV  = Math.max(...vals);
+
+  // Which metric to highlight
+  const pctAboveMean   = m.dir==='above' ? pctAbove(vals,mn) : pctBelow(vals,mn);
+  const pctAboveMedian = m.dir==='above' ? pctAbove(vals,md) : pctBelow(vals,md);
+
+  // Build dot strip
+  const dots = buildDotStrip(vals, mn, md, minV, maxV, m.dir);
+
+  const skewLabel = Math.abs(sk)<0.5?'Symmetrisch':sk>0?'Rechtsschief (positive Ausreißer)':'Linksschief (negative Ausreißer)';
+  const skewColor = Math.abs(sk)<0.5?'var(--green)':Math.abs(sk)<1?'var(--yellow)':'var(--mean)';
+
+  return `<div class="metric-card">
+    <div class="mc-head">
+      <span class="mc-title">${m.label}</span>
+      <span class="mc-dir">${m.dir==='above'?'↑ mehr = besser':m.dir==='below'?'↓ weniger = besser':'ℹ Info-Metrik'}</span>
+    </div>
+    <div class="stat-boxes">
+      <div class="stat-box sb-mean">
+        <div class="sb-type">Mittelwert</div>
+        <div class="sb-val">${m.fmtFn(mn)}</div>
+        <div class="sb-sub">${m.dir!=='any'?`${pctAboveMean} % der Repos ${m.dir==='above'?'≥':'≤'} Schwelle`:'(nur Info)'}</div>
+      </div>
+      <div class="stat-box sb-median">
+        <div class="sb-type">Median</div>
+        <div class="sb-val">${m.fmtFn(md)}</div>
+        <div class="sb-sub">${m.dir!=='any'?`${pctAboveMedian} % der Repos ${m.dir==='above'?'≥':'≤'} Schwelle`:'(nur Info)'}</div>
+      </div>
+    </div>
+    ${dots}
+    <div class="pcts">
+      <span class="pct-item"><div class="pct-dot" style="background:var(--muted)"></div>Min: ${m.fmtFn(minV)}</span>
+      <span class="pct-item"><div class="pct-dot" style="background:var(--text)"></div>Max: ${m.fmtFn(maxV)}</span>
+      <span class="pct-item"><div class="pct-dot" style="background:${skewColor}"></div>Schiefe: <strong style="color:${skewColor}">${skewLabel}</strong> (${sk.toFixed(2)})</span>
+    </div>
+  </div>`;
+}
+
+function buildDotStrip(vals, mn, md, minV, maxV, dir) {
+  const range = maxV - minV || 1;
+  const toX   = v => Math.max(1, Math.min(99, ((v - minV) / range) * 100));
+  const mnX   = toX(mn);
+  const mdX   = toX(md);
+
+  const dots = vals.map(v => {
+    const x = toX(v);
+    // Color based on position relative to both thresholds
+    let color;
+    if (dir === 'above') {
+      color = v >= Math.max(mn,md) ? 'var(--green)' : v >= Math.min(mn,md) ? 'var(--yellow)' : 'var(--border2)';
+    } else if (dir === 'below') {
+      color = v <= Math.min(mn,md) ? 'var(--green)' : v <= Math.max(mn,md) ? 'var(--yellow)' : 'var(--border2)';
+    } else {
+      color = 'var(--median)';
+    }
+    // Jitter y slightly for readability
+    const jitter = (Math.abs(Math.sin(v * 137.5)) * 20) - 10;
+    return `<div class="dot" style="left:calc(${x}% - 4px);background:${color};top:calc(50% + ${jitter}px - 4px)" title="${v.toLocaleString('de-DE',{maximumFractionDigits:2})}"></div>`;
+  }).join('');
+
+  return `<div class="chart-wrap">
+    <div style="position:relative;padding-top:22px">
+      <div class="dot-strip">
+        ${dots}
+        <div class="vline vline-mean" style="left:${mnX}%">
+          <div class="vline-label mean" style="top:-18px">${mn.toLocaleString('de-DE',{maximumFractionDigits:1})}</div>
+        </div>
+        <div class="vline vline-median" style="left:${mdX}%">
+          <div class="vline-label median" style="top:auto;bottom:-18px">${md.toLocaleString('de-DE',{maximumFractionDigits:1})}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:20px;font-size:.65rem;color:var(--muted);font-family:var(--mono)">
+        <span>Min</span><span>Max</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildVerdictTable() {
+  const rows = METRICS.filter(m => m.dir !== 'any').map(m => {
+    const vals = REPOS.map(r => r[m.key]).filter(v => v !== null && isFinite(v));
+    const mn   = mean(vals);
+    const md   = median(vals);
+    const sk   = skewness(vals);
+    const diff = Math.abs(mn - md) / (mn || 1) * 100;
+
+    let rec, recClass;
+    if (Math.abs(sk) < 0.5) {
+      rec = 'Beide gleich gut'; recClass = 'v-tie';
+    } else if (Math.abs(sk) >= 1) {
+      rec = 'Median empfohlen'; recClass = 'v-median';
+    } else {
+      rec = 'Median leicht besser'; recClass = 'v-median';
+    }
+
+    const skewStr = Math.abs(sk) < 0.5 ? '✅ gering' : Math.abs(sk) < 1 ? '⚠ mittel' : '❌ stark';
+    return `<tr>
+      <td>${m.label}</td>
+      <td class="v-mean" style="font-family:var(--mono)">${mn.toLocaleString('de-DE',{maximumFractionDigits:1})}</td>
+      <td class="v-median" style="font-family:var(--mono)">${md.toLocaleString('de-DE',{maximumFractionDigits:1})}</td>
+      <td>${skewStr} (${sk.toFixed(2)})</td>
+      <td class="${recClass}">${rec}</td>
+    </tr>`;
+  });
+  document.getElementById('verdict-body').innerHTML = rows.join('');
+}
+</script>
+</body>
+</html>
