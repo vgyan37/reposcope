@@ -1,100 +1,100 @@
 {
-  "generated_at": "2026-05-11T08:45:32.710047+00:00",
+  "generated_at": "2026-05-14T08:04:00.133098+00:00",
   "sample_size": 100,
   "means": {
-    "commits30": 817,
-    "daysInactive": 68.71,
-    "contributors": 87.3939,
-    "closeRate": 0.4688,
-    "relFreq": 36.662,
-    "avgClose": 10.3,
-    "avgComments": 1.3199,
-    "fehlerProd": 0.8525,
+    "commits30": 667.2128,
+    "daysInactive": 69.72,
+    "contributors": 87.3838,
+    "closeRate": 0.4573,
+    "relFreq": 36.8207,
+    "avgClose": 10.5292,
+    "avgComments": 1.3268,
+    "fehlerProd": 2.1949,
     "forkRatio": 0.1629,
-    "starsTage": 192.6828
+    "starsTage": 189.2626
   },
   "medians": {
-    "commits30": 196.5,
+    "commits30": 139,
     "daysInactive": 1.0,
     "contributors": 99,
-    "closeRate": 0.4286,
-    "relFreq": 12.86,
-    "avgClose": 1.0,
-    "avgComments": 1.13,
-    "fehlerProd": 0.0311,
-    "forkRatio": 0.1412,
-    "starsTage": 59.8285
+    "closeRate": 0.437,
+    "relFreq": 12.88,
+    "avgClose": 0.965,
+    "avgComments": 1.165,
+    "fehlerProd": 0.0474,
+    "forkRatio": 0.1411,
+    "starsTage": 59.7805
   },
   "kpi_stats": {
     "commits30": {
-      "mean": 817,
-      "median": 196.5,
-      "stdev": 2500.9327,
-      "p25": 68,
-      "p75": 660
+      "mean": 667.2128,
+      "median": 139,
+      "stdev": 2427.6522,
+      "p25": 7,
+      "p75": 444
     },
     "daysInactive": {
-      "mean": 68.71,
+      "mean": 69.72,
       "median": 1.0,
-      "stdev": 168.456,
+      "stdev": 169.2628,
       "p25": 0,
-      "p75": 20
+      "p75": 23
     },
     "contributors": {
-      "mean": 87.3939,
+      "mean": 87.3838,
       "median": 99,
-      "stdev": 28.3843,
+      "stdev": 28.4058,
       "p25": 97,
       "p75": 100
     },
     "closeRate": {
-      "mean": 0.4688,
-      "median": 0.4286,
-      "stdev": 0.3095,
-      "p25": 0.1875,
-      "p75": 0.7727
+      "mean": 0.4573,
+      "median": 0.437,
+      "stdev": 0.309,
+      "p25": 0.1852,
+      "p75": 0.7273
     },
     "relFreq": {
-      "mean": 36.662,
-      "median": 12.86,
-      "stdev": 64.8798,
-      "p25": 4.55,
-      "p75": 47.42
+      "mean": 36.8207,
+      "median": 12.88,
+      "stdev": 64.8868,
+      "p25": 4.32,
+      "p75": 48.95
     },
     "avgClose": {
-      "mean": 10.3,
-      "median": 1.0,
-      "stdev": 27.4891,
-      "p25": 0.17,
-      "p75": 5
+      "mean": 10.5292,
+      "median": 0.965,
+      "stdev": 28.018,
+      "p25": 0.08,
+      "p75": 4.86
     },
     "avgComments": {
-      "mean": 1.3199,
-      "median": 1.13,
-      "stdev": 0.9058,
+      "mean": 1.3268,
+      "median": 1.165,
+      "stdev": 0.9218,
       "p25": 0.67,
-      "p75": 1.95
+      "p75": 1.82
     },
     "fehlerProd": {
-      "mean": 0.8525,
-      "median": 0.0311,
-      "stdev": 3.12,
-      "p25": 0.0123,
-      "p75": 0.1429
+      "mean": 2.1949,
+      "median": 0.0474,
+      "stdev": 5.8052,
+      "p25": 0.0184,
+      "p75": 0.5833
     },
     "forkRatio": {
       "mean": 0.1629,
-      "median": 0.1412,
+      "median": 0.1411,
       "stdev": 0.1035,
-      "p25": 0.0938,
-      "p75": 0.2066
+      "p25": 0.094,
+      "p75": 0.2067
     },
     "starsTage": {
-      "mean": 192.6828,
-      "median": 59.8285,
-      "stdev": 553.7691,
-      "p25": 38.768,
-      "p75": 119.979
+      "mean": 189.2626,
+      "median": 59.7805,
+      "stdev": 525.5589,
+      "p25": 38.761,
+      "p75": 119.889
     }
   },
   "top_languages": [
@@ -111,11 +111,11 @@
       10
     ],
     [
-      "C++",
+      "Go",
       5
     ],
     [
-      "Go",
+      "C++",
       5
     ],
     [
